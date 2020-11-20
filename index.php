@@ -17,17 +17,28 @@ require_once("php/db.php");
 		<div class="tasks-wrap">
 		<?php
 
-            $deals = $collection->find();
+            $deals = $collection->find([],['limit' => 1,'sort' => ['id' => 1]]);
 
             foreach ($deals as $doc) {
-                if($doc['done'] == false) {
-                    echo "<div class='tasks'>".$doc['id'].". <div class='tasks-text-wrap'>".$doc['text']."</div><a class='mark-btn' href='php/mark.php?id=".$doc['id']."'></a><a class='delete-btn' href='php/delete.php?id=".$doc['id']."'></a></div>";
-                } else {
-                    echo "<div class='tasks'>".$doc['id'].". <div class='tasks-text-wrap'>".$doc['text']."</div><div class='marked-btn'></div><a class='delete-btn' href='php/delete.php?id=".$doc['id']."'></a></div>";
-                }
+                $id = $doc['id'];
             }
 
-            $client->close; 
+            if($id !=  NULL) {
+
+                $deals = $collection->find();
+
+                foreach ($deals as $doc) {
+                    if($doc['done'] == false) {
+                        echo "<div class='tasks'>".$doc['id'].". <div class='tasks-text-wrap'>".$doc['text']."</div><a class='mark-btn' href='php/mark.php?id=".$doc['id']."'></a><a class='delete-btn' href='php/delete.php?id=".$doc['id']."'></a></div>";
+                    } else {
+                        echo "<div class='tasks'>".$doc['id'].". <div class='tasks-text-wrap'>".$doc['text']."</div><div class='marked-btn'></div><a class='delete-btn' href='php/delete.php?id=".$doc['id']."'></a></div>";
+                    }
+                }
+            } else {
+                echo "You don't have any deals yet.";
+            }
+
+            $client->close;
 
         ?>
         </div>
